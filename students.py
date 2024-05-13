@@ -8,9 +8,10 @@ import pandas as pd
 import warnings
 
 warnings.filterwarnings('ignore', category=FutureWarning)
-
+import sys
+file_path = sys.argv[1]
 # Load the students dataset from the text file
-students = pd.read_csv('students.csv', sep=',')
+students = pd.read_csv(file_path, sep=',')
 print(students.head())
 
 # Split the dataset into the data and target
@@ -18,7 +19,7 @@ students_data = students.drop('Chance of Admit ', axis=1)  # Notice the space in
 students_target = students['Chance of Admit ']
 
 # Split the dataset into the Training set and Test set
-students_train_data, students_test_data, students_train_target, students_test_target = train_test_split(students_data, students_target, test_size=0.1, random_state=25)
+students_train_data, students_test_data, students_train_target, students_test_target = train_test_split(students_data, students_target, test_size=0.2, random_state=25)
 
 # Linear Regression
 rmse, r2_train, r2_test, cv_mean = run_model(LinearRegression(), students_train_data, students_train_target, students_test_data, students_test_target, "Linear Regression")

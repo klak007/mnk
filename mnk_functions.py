@@ -4,7 +4,8 @@ import pandas as pd
 import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import cross_val_score
-
+import sys
+file_path = sys.argv[1]
 
 def load_and_preprocess_boston_data(file_path):
     # Define column names based on the Boston Housing dataset
@@ -77,7 +78,9 @@ def run_model(model, X_train, y_train, X_test, y_test, model_name):
     plt.ylabel('Predicted ')
     plt.title('Actual vs Predicted ({})'.format(model_name))
     plt.legend()
-    plt.savefig('plots/actual_vs_predicted_{}.png'.format(model_name.lower().replace(' ', '_')))
+    # save figure with the name of the model and the file name
+    plt.savefig('plots/actual_vs_predicted_{}_{}.png'.format(model_name.lower().replace(' ', '_'), file_path.split('.')[0]))
+    # plt.savefig('plots/actual_vs_predicted_{}.png'.format(model_name.lower().replace(' ', '_')))
     # plt.show()
 
     return rmse, r2_score_train, r2_score_test, cv.mean()
@@ -105,7 +108,7 @@ def plot_model_performance(model_summaries):
     axe.set_yticklabels(axe.get_yticklabels(), rotation=30, ha='right')  # Rotate and align y-axis labels
     plt.title('Cross-Validation Score', size=24)
     plt.tight_layout()  # Adjust the layout
-    plt.savefig('plots/cross_validation_summary.png')
+    plt.savefig('plots/cross_validation_summary_{}.png'.format(file_path.split('.')[0]))
     # plt.show()
 
     # Plot R2 Score (Training) and R2 Score (Test)
@@ -124,7 +127,7 @@ def plot_model_performance(model_summaries):
     axes[1].set_xlim(0, 1.0)
     axes[1].set_title('R2 Score Test', size=24, pad=20)  # Add padding to the title
     plt.tight_layout()  # Adjust the layout
-    plt.savefig('plots/r2_score_summary.png')
+    plt.savefig('plots/r2_score_summary_{}.png'.format(file_path.split('.')[0]))
     # plt.show()
 
     # Plot RMSE
@@ -134,5 +137,5 @@ def plot_model_performance(model_summaries):
     axe.set_xlabel('Model', size=20)
     axe.set_ylabel('RMSE', size=20)
     plt.title('RMSE', size=24)
-    plt.savefig('plots/rmse_summary.png')
+    plt.savefig('plots/rmse_summary_{}.png'.format(file_path.split('.')[0]))
     # plt.show()

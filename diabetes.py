@@ -8,9 +8,10 @@ import pandas as pd
 import warnings
 
 warnings.filterwarnings('ignore', category=FutureWarning)
-
+import sys
+file_path = sys.argv[1]
 # Load the diabetes dataset from the text file
-diabetes = pd.read_csv('diabetes.txt', sep='\t')
+diabetes = pd.read_csv(file_path, sep='\t')
 print(diabetes.head())
 
 # Split the dataset into the data and target
@@ -18,7 +19,7 @@ diabetes_data = diabetes.drop('Y', axis=1)
 diabetes_target = diabetes['Y']
 
 # Split the dataset into the Training set and Test set
-patients_train_data, patients_test_data, patients_train_target, patients_test_target = train_test_split(diabetes_data, diabetes_target, test_size=0.1, random_state=25)
+patients_train_data, patients_test_data, patients_train_target, patients_test_target = train_test_split(diabetes_data, diabetes_target, test_size=0.2, random_state=25)
 
 # Linear Regression
 rmse, r2_train, r2_test, cv_mean = run_model(LinearRegression(), patients_train_data, patients_train_target, patients_test_data, patients_test_target, "Linear Regression")
@@ -48,7 +49,9 @@ svr_summary = create_model_summary("Support Vector Regression", rmse, r2_train, 
 
 # Combine the summaries and plot the model performance
 model_summaries = pd.concat([linear_summary, ridge_summary, svr_summary])
+
 # add the results at the end to a CSV file with the one more column for the dataset name, there can be data already in the results.csv file from other datasets
+
 model_summaries['Dataset'] = 'Diabetes'
 model_summaries.to_csv('results.csv', mode='a', header=False, index=False)
 
